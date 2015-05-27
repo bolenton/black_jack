@@ -52,10 +52,10 @@ def check_points(points)
 end
 
 def check_dealer_points(points)
-  if points > 16
+  if points > 17
     puts "Dealer stands at #{points}"
     game_over = "y"
-  elsif points <= 16
+  elsif points <= 17
     puts "Dealer has #{points}"
   elsif points > 21 
     puts "Dealer Bust! You Win"

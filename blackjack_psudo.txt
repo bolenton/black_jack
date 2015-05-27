@@ -1,0 +1,45 @@
+dealer has a deck of cards
+dealer deals 2 cards to his hand, and 2 cards to player hand
+
+loop 
+	player decides to hit or stand?
+	if player hits
+		player gets one more card in hand
+		if hand == 21 
+			player win
+			exit game
+		else if	hand > 21 
+			player bust
+			exit game
+		else if hand < 21
+			next loop	
+	else if player stands 
+		break loop
+end
+
+loop 
+	dealer decides to hit or stand
+	if dealer hits
+		if hand == 21
+			dealer win
+			exit game
+		else if hand > 21 
+			player win
+			exit game
+		else if hand < 21 
+			next loop
+	else if dealer stands
+		break loop
+end
+
+compare dealer hand with player hand
+if player hand is higher
+	player wins
+else
+	dealer wins
+
+
+
+	
+
+

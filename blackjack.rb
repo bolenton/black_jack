@@ -4,7 +4,7 @@ deck = {
   hearts: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1, 11],
   clubs: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1, 11],
   spades: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1, 11],
-  clovers: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1, 11],
+  diamonds: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1, 11],
 }
 
 def clear_screen
@@ -24,7 +24,7 @@ def deal_player_hand(deck)
   card_one= deck[suit_one].sample
   card_two = deck[suit_two].sample
   puts "You were delt #{card_one} of #{suit_one} and #{card_two} of #{suit_two}"
-  return card_one, card_two
+  [card_one, card_two]
 end
 
 def deal_dealer_hand(deck)
@@ -32,14 +32,14 @@ def deal_dealer_hand(deck)
   suit_two = deck.keys.sample
   card_one = deck[suit_one].sample
   card_two = deck[suit_two].sample
-  puts "DEALER was delt #{card_one} of #{suit_one} and #{card_two} of #{suit_two}"
-  return card_one, card_two
+  puts "DEALER was delt 1 face down card and #{card_two} of #{suit_two}"
+  [card_one, card_two]
 end
 
 def hit(deck)
   suit = deck.keys.sample 
   card = deck[suit].sample
-  puts "DEALER delt #{card} of #{suit}"
+  puts "DEALER delt the #{card} of #{suit}"
   return card
 end
 
@@ -51,6 +51,13 @@ def check_points(points)
     puts "You have #{points}, You BUSTED!"
     exit
   end
+end
+
+def display_total(player_total, dealer_total)
+  puts "_______________"
+  puts "|Player Has: #{player_total} "  
+  puts "|Dealer Has: #{dealer_total} " 
+  puts "---------------"
 end
 
 # Start Game 
@@ -67,7 +74,7 @@ if player_hand.inject(:+) == 21
 end
 
 dealer_hand = deal_dealer_hand(deck)
-
+display_total(player_hand.inject(:+), dealer_hand.inject(:+))
  # Player Hits or Stands
 begin
   design
@@ -77,7 +84,9 @@ begin
   player_choice = gets.chomp.downcase
   if player_choice[0] == "h"
     clear_screen
-    p player_hand << hit(deck)
+    display_total(player_hand.inject(:+), dealer_hand.inject(:+))
+    design
+    player_hand << hit(deck)
     player_total = player_hand.inject(:+)
     check_points(player_total)
   else
@@ -87,6 +96,8 @@ end until player_choice[0] == "s"
 
 # Dealer hits or stand
 begin
+  clear_screen
+  display_total(player_hand.inject(:+), dealer_hand.inject(:+))
   design
   puts "DEALER has #{dealer_hand.inject(:+)} total."  
   design
@@ -102,12 +113,9 @@ begin
     puts "Dealer stands at #{dealer_total}"
     dealer_stands = true
   elsif dealer_total < 17
-    p dealer_hand << hit(deck)
-    puts "Return to continue"
-    pause = gets
+    dealer_hand << hit(deck)
     next
   end 
-  st = gets
 end until dealer_stands
 
 if dealer_stands

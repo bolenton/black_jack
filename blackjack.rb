@@ -19,27 +19,27 @@ def design
 end
 
 def deal_player_hand(deck)
-  suite_one = deck.keys.sample 
-  suite_two = deck.keys.sample
-  card_one= deck[suite_one].sample
-  card_two = deck[suite_two].sample
-  puts "You were delt #{card_one} of #{suite_one} and #{card_two} of #{suite_two}"
+  suit_one = deck.keys.sample 
+  suit_two = deck.keys.sample
+  card_one= deck[suit_one].sample
+  card_two = deck[suit_two].sample
+  puts "You were delt #{card_one} of #{suit_one} and #{card_two} of #{suit_two}"
   return card_one, card_two
 end
 
 def deal_dealer_hand(deck)
-  suite_one = deck.keys.sample 
-  suite_two = deck.keys.sample
-  card_one = deck[suite_one].sample
-  card_two = deck[suite_two].sample
-  puts "DEALER was delt #{card_one} of #{suite_one} and #{card_two} of #{suite_two}"
+  suit_one = deck.keys.sample 
+  suit_two = deck.keys.sample
+  card_one = deck[suit_one].sample
+  card_two = deck[suit_two].sample
+  puts "DEALER was delt #{card_one} of #{suit_one} and #{card_two} of #{suit_two}"
   return card_one, card_two
 end
 
 def hit(deck)
-  suite = deck.keys.sample 
-  card = deck[suite].sample
-  puts "DEALER delt #{card} of #{suite}"
+  suit = deck.keys.sample 
+  card = deck[suit].sample
+  puts "DEALER delt #{card} of #{suit}"
   return card
 end
 
@@ -49,25 +49,6 @@ def check_points(points)
     exit
   elsif points > 21
     puts "You have #{points}, You BUSTED!"
-    exit
-  elsif points < 21
-    game_over = 'n'  
-  end
-end
-
-def check_dealer_points(points)
-  if points == 21
-    puts "Dealer has BlackJack. You Lose"
-    puts "Dealer stands at #{points}"
-    exit
-  elsif points > 21
-    puts "Dealer Bust! You Win"
-    exit
-  elsif points > 16
-    puts "Dealer stands at #{points}"
-    exit
-  elsif points < 17
-    puts "Dealer has #{points}"
     exit
   end
 end
@@ -80,27 +61,28 @@ ready = gets.chomp
 
 # Deal cards
 player_hand = deal_player_hand(deck)
+if player_hand.inject(:+) == 21
+  puts "You have BlackJack! You Win!"
+  exit
+end
+
 dealer_hand = deal_dealer_hand(deck)
 
-player_total = 0
-dealer_total = 0
-
+ # Player Hits or Stands
 begin
   design
   puts "You have #{player_hand.inject(:+)} total."
   design
   puts "Hit or Stand?"
   player_choice = gets.chomp.downcase
-  
-  # Player Hits or Stands
   if player_choice[0] == "h"
     clear_screen
     p player_hand << hit(deck)
-    points = player_hand.inject(:+)
-    check_points(points)  
+    player_total = player_hand.inject(:+)
+    check_points(player_total)
+  else
+    player_total = player_hand.inject(:+)
   end
-  #player_total += points
-  #p player_total 
 end until player_choice[0] == "s"
 
 # Dealer hits or stand
@@ -108,10 +90,38 @@ begin
   design
   puts "DEALER has #{dealer_hand.inject(:+)} total."  
   design
-  points = dealer_hand.inject(:+)
-  check_dealer_points(points)
   
-end until dealer_choice = "s"
+  dealer_total = dealer_hand.inject(:+)
+  if dealer_total == 21
+    puts "Dealer has BlackJack. You Lose"
+    exit
+  elsif dealer_total > 21
+    puts "Dealer Bust! You Win"
+    exit
+  elsif dealer_total > 16
+    puts "Dealer stands at #{dealer_total}"
+    dealer_stands = true
+  elsif dealer_total < 17
+    p dealer_hand << hit(deck)
+    puts "Return to continue"
+    pause = gets
+    next
+  end 
+  st = gets
+end until dealer_stands
 
-puts "Game Over"
-
+if dealer_stands
+  if dealer_total > player_total
+    design
+    puts "Dealer has #{dealer_total} and Player has #{player_total}"
+    puts "Dealer WON!"
+    design
+  elsif player_total > dealer_total
+    design
+    puts "Player has #{player_total}, and Dealer has #{dealer_total}"
+    puts "Player WON!"
+    design
+  else
+    puts "Its a tie!"
+  end
+end

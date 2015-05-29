@@ -53,7 +53,7 @@ end
 clear_screen
 design
 puts "Welcome to BlackJack! What is your name?"
-name = gets.chomp.upcase
+name = gets.chomp.capitalize
 
 clear_screen
 # Deal cards

@@ -9,7 +9,6 @@ deck = {
 
 def clear_screen
   system "clear"
-  puts "****************************************"
 end
 
 def design
@@ -44,13 +43,7 @@ def hit(deck)
 end
 
 def check_points(points)
-  if points == 21
-    puts "You have BlackJack! You Win!"
-    exit
-  elsif points > 21
-    puts "You have #{points}, You BUSTED!"
-    exit
-  end
+
 end
 
 def display_total(player_total, dealer_total)
@@ -60,23 +53,37 @@ def display_total(player_total, dealer_total)
   puts "---------------"
 end
 
+def player_score()
+
+end
+
 # Start Game 
 clear_screen
 design
 puts "Welcome to BlackJack! Press RETURN when you are ready to play."
 ready = gets.chomp
 
+
+clear_screen
 # Deal cards
 player_hand = deal_player_hand(deck)
 if player_hand.inject(:+) == 21
-  puts "You have BlackJack! You Win!"
-  exit
+  puts "You have BlackJack! You Win!" 
 end
 
 dealer_hand = deal_dealer_hand(deck)
 display_total(player_hand.inject(:+), dealer_hand.inject(:+))
+
  # Player Hits or Stands
 begin
+  player_total = player_hand.inject(:+)
+  if player_total == 21
+    puts "You have BlackJack! You Win!"
+    exit
+  elsif player_total > 21
+    puts "You have #{player_total}, You BUSTED!"
+    exit
+end
   design
   puts "You have #{player_hand.inject(:+)} total."
   design
@@ -84,11 +91,10 @@ begin
   player_choice = gets.chomp.downcase
   if player_choice[0] == "h"
     clear_screen
-    display_total(player_hand.inject(:+), dealer_hand.inject(:+))
-    design
     player_hand << hit(deck)
     player_total = player_hand.inject(:+)
-    check_points(player_total)
+    display_total(player_hand.inject(:+), dealer_hand.inject(:+))
+    design   
   else
     player_total = player_hand.inject(:+)
   end
@@ -105,15 +111,17 @@ begin
   dealer_total = dealer_hand.inject(:+)
   if dealer_total == 21
     puts "Dealer has BlackJack. You Lose"
-    exit
+    break
   elsif dealer_total > 21
     puts "Dealer Bust! You Win"
-    exit
+    break
   elsif dealer_total > 16
     puts "Dealer stands at #{dealer_total}"
+    sleep(3)
     dealer_stands = true
   elsif dealer_total < 17
     dealer_hand << hit(deck)
+    sleep(3)
     next
   end 
 end until dealer_stands

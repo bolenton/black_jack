@@ -49,6 +49,14 @@ def display_total(player_total, dealer_total, name)
   puts "---------------"
 end
 
+def dealer_thinking
+  3.times do
+    print "..."
+    sleep(1.5)  
+  end
+  puts " "
+end
+
 # Start Game 
 play_again = ' '
 
@@ -103,19 +111,19 @@ begin
     design
     
     dealer_total = dealer_hand.inject(:+)
+    dealer_thinking
     if dealer_total == 21
       puts "Dealer has BlackJack. #{name} Lose"
       break
     elsif dealer_total > 21
       puts "Dealer Bust! #{name} Win"
       break
-    elsif dealer_total > 16
+    elsif dealer_total >= 17
       puts "Dealer stands at #{dealer_total}"
-      sleep(3)
       dealer_stands = true
     elsif dealer_total < 17
       dealer_hand << hit(deck)
-      sleep(3)
+      dealer_thinking
       next
     end 
   end until dealer_stands

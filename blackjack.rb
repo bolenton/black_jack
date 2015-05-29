@@ -1,10 +1,10 @@
 require "pry"
 
 deck = {
-  hearts: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1, 11],
-  clubs: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1, 11],
-  spades: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1, 11],
-  diamonds: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 1, 11],
+  hearts: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11, 1],
+  clubs: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11, 1],
+  spades: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11, 1],
+  diamonds: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11, 1],
 }
 
 def clear_screen
@@ -42,19 +42,11 @@ def hit(deck)
   return card
 end
 
-def check_points(points)
-
-end
-
 def display_total(player_total, dealer_total)
   puts "_______________"
   puts "|Player Has: #{player_total} "  
   puts "|Dealer Has: #{dealer_total} " 
   puts "---------------"
-end
-
-def player_score()
-
 end
 
 # Start Game 

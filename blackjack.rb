@@ -17,12 +17,12 @@ def design
   puts " "
 end
 
-def deal_player_hand(deck)
+def deal_player_hand(deck, name)
   suit_one = deck.keys.sample 
   suit_two = deck.keys.sample
   card_one= deck[suit_one].sample
   card_two = deck[suit_two].sample
-  puts "You were delt #{card_one} of #{suit_one} and #{card_two} of #{suit_two}"
+  puts "#{name} was delt #{card_one} of #{suit_one} and #{card_two} of #{suit_two}"
   [card_one, card_two]
 end
 
@@ -42,9 +42,9 @@ def hit(deck)
   return card
 end
 
-def display_total(player_total, dealer_total)
+def display_total(player_total, dealer_total, name)
   puts "_______________"
-  puts "|Player Has: #{player_total} "  
+  puts "|#{name} Has: #{player_total} "  
   puts "|Dealer Has: #{dealer_total} " 
   puts "---------------"
 end
@@ -52,32 +52,31 @@ end
 # Start Game 
 clear_screen
 design
-puts "Welcome to BlackJack! Press RETURN when you are ready to play."
-ready = gets.chomp
-
+puts "Welcome to BlackJack! What is your name?"
+name = gets.chomp.upcase
 
 clear_screen
 # Deal cards
-player_hand = deal_player_hand(deck)
+player_hand = deal_player_hand(deck, name)
 if player_hand.inject(:+) == 21
-  puts "You have BlackJack! You Win!" 
+  puts "BlackJack! #{name} Win!" 
 end
 
 dealer_hand = deal_dealer_hand(deck)
-display_total(player_hand.inject(:+), dealer_hand.inject(:+))
+display_total(player_hand.inject(:+), dealer_hand.inject(:+), name)
 
  # Player Hits or Stands
 begin
   player_total = player_hand.inject(:+)
   if player_total == 21
-    puts "You have BlackJack! You Win!"
+    puts "BlackJack! #{name} Win!"
     exit
   elsif player_total > 21
-    puts "You have #{player_total}, You BUSTED!"
+    puts "#{name} has #{player_total}, #{name} BUSTED!"
     exit
 end
   design
-  puts "You have #{player_hand.inject(:+)} total."
+  puts "#{name} has #{player_hand.inject(:+)} total."
   design
   puts "Hit or Stand?"
   player_choice = gets.chomp.downcase
@@ -85,7 +84,7 @@ end
     clear_screen
     player_hand << hit(deck)
     player_total = player_hand.inject(:+)
-    display_total(player_hand.inject(:+), dealer_hand.inject(:+))
+    display_total(player_hand.inject(:+), dealer_hand.inject(:+), name)
     design   
   else
     player_total = player_hand.inject(:+)
@@ -95,17 +94,17 @@ end until player_choice[0] == "s"
 # Dealer hits or stand
 begin
   clear_screen
-  display_total(player_hand.inject(:+), dealer_hand.inject(:+))
+  display_total(player_hand.inject(:+), dealer_hand.inject(:+), name)
   design
   puts "DEALER has #{dealer_hand.inject(:+)} total."  
   design
   
   dealer_total = dealer_hand.inject(:+)
   if dealer_total == 21
-    puts "Dealer has BlackJack. You Lose"
+    puts "Dealer has BlackJack. #{name} Lose"
     break
   elsif dealer_total > 21
-    puts "Dealer Bust! You Win"
+    puts "Dealer Bust! #{name} Win"
     break
   elsif dealer_total > 16
     puts "Dealer stands at #{dealer_total}"
@@ -121,13 +120,13 @@ end until dealer_stands
 if dealer_stands
   if dealer_total > player_total
     design
-    puts "Dealer has #{dealer_total} and Player has #{player_total}"
+    puts "Dealer has #{dealer_total} and #{name} has #{player_total}"
     puts "Dealer WON!"
     design
   elsif player_total > dealer_total
     design
-    puts "Player has #{player_total}, and Dealer has #{dealer_total}"
-    puts "Player WON!"
+    puts "#{name} has #{player_total}, and Dealer has #{dealer_total}"
+    puts "#{name} WON!"
     design
   else
     puts "Its a tie!"
